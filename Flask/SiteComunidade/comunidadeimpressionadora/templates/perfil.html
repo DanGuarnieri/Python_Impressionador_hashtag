@@ -1,0 +1,53 @@
+{% extends "base.html" %} 
+
+{% block body %}
+<div class="container mt-5 d-flex justify-content-center">
+
+            <div class="card p-3">
+               <div class="d-flex align-items-center">
+                  <div class="image pe-2">
+                     <img src="{{ foto_perfil }}" class="rounded" width="200" >
+                  </div>
+                  <div class="ml-3 w-100">                    
+                   <h4 class="mb-0 mt-0">{{ current_user.username }}</h4>
+                   <span>{{ current_user.email }}</span>
+                   <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
+                    <div class="d-flex flex-column">
+                        {% if not current_user.cursos or current_user.cursos == 'Não Informado' %}
+                           <span class="articles">Cursos</span>
+                           <span class="number1">0</span>
+                        {% else %}
+                           {% set cursos = current_user.cursos.split(';') %}
+                           <span class="articles">Cursos</span>
+                           <span class="number1">{{ cursos | select | list | length }}</span>
+                        {% endif %}
+
+                     </div>
+   
+                    <div class="d-flex flex-column">
+                        <span class="rating">Posts</span>
+                        <span class="number3">0</span>
+                    </div>
+                   </div>
+                   <div class="button mt-2 d-flex flex-row align-items-center ">
+                    <a class='w-100' href="{{ url_for('editar_perfil')}}"><button class="btn btn-sm btn-primary w-100 ml-2">Editar Perfil</button></a>              
+                   </div>
+                </div>                  
+               </div>
+            </div>             
+         </div>
+         <div class="row justify-content-center">
+            <div class="col col-4" style="text-align:center">
+               <strong>Cursos</strong><br>
+               {% for curso in current_user.cursos.split(';') %}
+                  {% if not ';' in current_user.cursos %}
+                     <button type="button" class="btn mt-2" disabled>Sem Cursos Cadastrados</button>
+                  {% else %}
+                  <button type="button" class="btn btn-success mt-2" disabled>{{curso}}</button>
+                  {% endif %}
+               {% endfor %}
+            </div>
+         </div>
+{% block form_editar_pefil %}
+{% endblock %}
+{% endblock %}

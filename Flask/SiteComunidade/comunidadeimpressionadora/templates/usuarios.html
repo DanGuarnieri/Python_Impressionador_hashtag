@@ -1,0 +1,63 @@
+{% extends "base.html" %} 
+
+{% block body %}
+   <div class="container">
+     <h1>Usuários</h1>
+     <h2>Site em desenvolvimento</h2>
+   <u>
+      {% for usuarios in lista_usuarios %}
+      <div class="container mt-5 d-flex justify-content-center">
+
+            <div class="card p-3">
+               <div class="d-flex align-items-center">
+                  <div class="image pe-2">
+                     <img src="{{ url_for('static', filename='fotos_perfil/{}'.format(usuarios.foto_perfil)) }}" class="rounded" width="200" >
+                  </div>
+                  <div class="ml-3 w-100">                    
+                   <h4 class="mb-0 mt-0">{{ usuarios.username }}</h4>
+                   <span>{{ usuarios.email }}</span>
+                   <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
+                    <div class="d-flex flex-column">
+                        {% if not usuarios.cursos or usuarios.cursos == 'Não Informado' %}
+                           <span class="articles">Cursos</span>
+                           <span class="number1">0</span>
+                        {% else %}
+                           {% set cursos = usuarios.cursos.split(';') %}
+                           <span class="articles">Cursos</span>
+                           <span class="number1">{{ cursos | select | list | length }}</span>
+                        {% endif %}
+
+                     </div>
+   
+                    <div class="d-flex flex-column">
+                        <span class="rating">Posts</span>
+                        <span class="number3">0</span>
+                    </div>
+                   </div>
+                </div>                  
+               </div>
+            </div>             
+         </div>
+         <div class="row justify-content-center">
+            <div class="col col-4" style="text-align:center">
+               <strong>Cursos</strong><br>
+               {% for curso in usuarios.cursos.split(';') %}
+                  {% if not ';' in usuarios.cursos %}
+                     <button type="button" class="btn mt-2" disabled>Sem Cursos Cadastrados</button>
+                  {% else %}
+                  <button type="button" class="btn btn-success mt-2" disabled>{{curso}}</button>
+                  {% endif %}
+               {% endfor %}
+            </div>
+         </div>
+
+
+
+
+      {% endfor %}
+    
+   </u>
+   </div>
+   <div class="mb-5">
+  </div>
+{% endblock %}
