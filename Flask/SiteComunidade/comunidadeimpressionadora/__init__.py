@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import os
+import sqlalchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '123fda61553c986fae5f8ceee79c1bcd'
@@ -18,5 +19,13 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message = 'Faça o login para acessar a página'
 login_manager.login_message_category = 'alert-info'
+
+from comunidadeimpressionadora import models
+engine = sqlalchemy.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+inspector = sqlalchemy.inspect(engine)
+if not inspector.has_table("usuario"):
+    with app.app_context():
+        database.drop_all()
+        database.create_all()
 
 from comunidadeimpressionadora import routes
