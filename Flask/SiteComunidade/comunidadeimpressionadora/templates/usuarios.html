@@ -3,10 +3,8 @@
 {% block body %}
    <div class="container">
      <h1>Usuários</h1>
-     <h2>Site em desenvolvimento</h2>
-   <u>
       {% for usuarios in lista_usuarios %}
-      <div class="container mt-5 d-flex justify-content-center">
+      <div class="container mt-5 d-flex justify-content-center ">
 
             <div class="card p-3">
                <div class="d-flex align-items-center">
@@ -31,7 +29,7 @@
    
                     <div class="d-flex flex-column">
                         <span class="rating">Posts</span>
-                        <span class="number3">0</span>
+                        <span class="number3"> {{ usuarios.contar_posts() }}</span>
                     </div>
                    </div>
                 </div>                  
@@ -56,7 +54,6 @@
 
       {% endfor %}
     
-   </u>
    </div>
    <div class="mb-5">
   </div>

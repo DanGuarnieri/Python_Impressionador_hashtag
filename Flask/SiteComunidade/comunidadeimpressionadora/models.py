@@ -20,6 +20,9 @@ class Usuario(database.Model, UserMixin):
     @validates('email')
     def convert_lower(self, key, valor):
         return valor.strip().lower()
+    
+    def contar_posts(self):
+        return len(self.posts)
 
 class Post(database.Model):
     id = database.Column(database.Integer, primary_key=True)
