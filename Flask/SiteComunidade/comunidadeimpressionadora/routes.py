@@ -49,7 +49,7 @@ def login():
     
     if form_criar_conta.validate_on_submit() and 'botao_submit_criarconta' in request.form:
         #Criptografar senhas
-        senha_cript = bcrypt.generate_password_hash(form_criar_conta.senha.data)
+        senha_cript = bcrypt.generate_password_hash(form_criar_conta.senha.data).decode("utf-8")
         #Criar um usuário para a classe Usuario
         usuario = Usuario(username=form_criar_conta.username.data, email=form_criar_conta.email.data, senha=senha_cript)
         # adciono na sessão do banco
