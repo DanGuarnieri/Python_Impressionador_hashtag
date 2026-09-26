@@ -12,3 +12,9 @@ sistemas_path
 sql
 vendas.db
 chromedriver-win64
+*.db
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.env
+*.xlsx
