@@ -1,3 +1,58 @@
-venv
 Imagens Cursos
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+# C extensions
+*.so
+# Distribution / packaging
+Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+installed.cfg
+*.egg
+MANIFEST
+# PyInstaller
+*.manifest
+*.spec
+# Unit test / coverage reports
+htmlcov/
+tox/
+nox/
+coverage
+coverage.*
+cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+# Environments
+env
+venv
+env/
+venv/
+# Jupyter Notebook checkpoints
+ipynb_checkpoints/
+# IDE-specific files (e.g., PyCharm, VSCode)
+idea/
+vscode/
+# Logs and databases
+*.log
 db.sqlite3
+# Others (e.g., Sphinx docs, mypy, etc.)
+docs/_build/
+mypy_cache/
+pyre/
+pytype/
