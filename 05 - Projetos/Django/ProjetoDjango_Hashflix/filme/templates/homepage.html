@@ -1,9 +1,22 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block titulo %}
 HomePage Hashflix
 {% endblock %}
 
+{%block head %}
+<style>
+    #id_email{
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+        color: #000000;
+        padding: 5px;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
 {% block content %}
 
     <header class="min-h-screen bg-black bg-opacity-75 bg-blend-overlay showcase border-gray-600 border-b-8 flex justify-center items-center bg-no-repeat"  style="background-image: url('{% static 'images/background_netflix.jpg' %}');">
@@ -20,11 +33,12 @@ HomePage Hashflix
             </h4>
 
             <div class="w-full flex justify-center">
-                <div class="flex justify-center items-center w-11/12 md:w-10/12">
-                    <form method="post" class="w-6/12 justify-center">
+                <div class="flex justify-center items-center w-11/12 md:w-8/12">
+                    <form method="post" class="w-full md:w-6/12">
+                        {% csrf_token %}
                         <div class="flex flex-grow items-stretch">
-                            <input>
-                        <button class="bg-red-600 bg-primary_red font-medium md:font-normal flex justify-center items-center py-2 px-3 md:px-0 rounded-br-sm rounded-tr-sm md:text-2xl" type="submit">
+                            {{ form }}
+                        <button class="bg-red-600 font-medium md:font-normal flex shrink-0 justify-center items-center py-1 px-3 rounded-br-sm rounded-tr-sm" type="submit">
                             <span>
                                 Acessar
                             </span>
@@ -32,7 +46,6 @@ HomePage Hashflix
                         </button>
                         </div>
                     </form>
-                    </a>
                 </div>
             </div>
 
@@ -82,12 +95,11 @@ HomePage Hashflix
             <img src="{% static 'images/netflix_kid.png'%}" class="w-8/12" alt="">
         </div>
     </section>
-    <footer class=" px-5 py-10 ">
-        <ul class="flex justify-between items-center">
-            
+    <footer class="px-5 py-10 text-gray-400">
+        <ul class="flex flex-wrap justify-between items-center gap-3">
             <li>&copy; 2026</li>
-            <li> Feito com Python (Django)</li>
-            <li>Python Impressionador</li>
+            <li>Feito com Python (Django)</li>
+            <li>Danilo Guarnieri</li>
         </ul>
     </footer>
 

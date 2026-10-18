@@ -102,47 +102,72 @@ h1 {
 
 
     <main class='bg-primary_black min-h-screen w-full'>
-        <section class="h-screen relative bg-no-repeat pb-8 pl-6 flex items-end bg-cover" style="background-image: url('{{ filme_destaque.thumb.url }}');">
-            <div>
-                <h2 class="text-6xl font-semibold text-white my-4">
-                    {{ filme_destaque.titulo}}
-                </h2>
-                <p class=" w-11/12 md:w-5/12 font-medium text-white my-4">
-                     {{ filme_destaque.descricao}}
-                </p>
-                <div class="flex my-4">
-                    <a href="{% url 'filme:detalhesfilme' filme_destaque.pk %}">
-                        <button class="flex items-center bg-white py-2 px-5 rounded-md" style='color:black;'>
-                            <ion-icon name="play" class="text-2xl"></ion-icon>
-                            <span class="ml-3 font-medium " >
-                                Play
-                            </span>
-                        </button>
-                    </a>
-                </div>
+       {% if filme_destaque %}
+    <section
+        class="h-screen relative bg-no-repeat pb-8 pl-6 flex items-end bg-cover"
+        style="background-image: url('{{ filme_destaque.thumb.url }}');"
+    >
+        <div>
+            <h2 class="text-6xl font-semibold text-white my-4">
+                {{ filme_destaque.titulo }}
+            </h2>
+
+            <p class="w-11/12 md:w-5/12 font-medium text-white my-4">
+                {{ filme_destaque.descricao }}
+            </p>
+
+            <div class="flex my-4">
+                <a href="{% url 'filme:detalhesfilme' filme_destaque.pk %}">
+                    <button class="flex items-center bg-white py-2 px-5 rounded-md"
+                            style="color: black;">
+                        <span class="ml-3 font-medium">Play</span>
+                    </button>
+                </a>
             </div>
-        </section> 
+        </div>
+    </section>
+{% else %}
+    <section class="min-h-screen flex flex-col items-center justify-center
+                    text-center px-6 bg-gray-950 text-white">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">
+            Bem-vindo ao Hashflix
+        </h1>
 
+        <p class="text-lg text-gray-300 mb-3">
+            Seu próximo filme favorito está esperando por você.
+        </p>
 
+        <p class="text-gray-400 mb-6">
+            Nosso catálogo está sendo preparado. Volte em breve!
+        </p>
+
+    </section>
+{% endif %}
         <section class='bg-primary_black flex justify-center py-2'>
             <div class="p-8 w-10/12 relative" >
                 <h2 class="text-gray-200 text-2xl font-medium">
-                    Novo
+                Novo
                 </h2>
                 <div class="wrapper">
                   <section id="section1" class="flex flex-nowrap items-center justify-center space-x-8">
                    
                     <a href="#section2" class="arrow__btn text-6xl page">‹</a>
-                    {% for filme in lista_filmes_recentes %}
-                    {% if forloop.counter < 5 %}
-                      <div class="item aspect-square w-1/4 m-4">
-                          <a href="{% url 'filme:detalhesfilme' filme.pk %}">
-                            <img src="{{ filme.thumb.url }}" class="rounded-md w-full h-full object-cover">
-                          </a>
-                      </div>
+                    {% if lista_filmes_recentes %}
+                        {% for filme in lista_filmes_recentes %}
+                        {% if forloop.counter < 5 %}
+                        <div class="item aspect-square w-1/4 m-4">
+                            <a href="{% url 'filme:detalhesfilme' filme.pk %}">
+                                <img src="{{ filme.thumb.url }}" class="rounded-md w-full h-full object-cover">
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-gray-400 py-8">
+                            Nenhum filme disponível no momento.
+                        </p>
                     {% endif %}
-                    {% endfor %}
-                        <a href="#section2" class="arrow__btn text-6xl">›</a>
+                <a href="#section2" class="arrow__btn text-6xl">›</a>
                   </section>
                     {% if lista_filmes_recentes|length > 4 %}
                       <section id="section2" class="flex flex-nowrap items-center justify-center">
@@ -174,7 +199,8 @@ h1 {
                   <section id="section1emAlta" class="flex flex-nowrap items-center justify-center space-x-8">
                    
                     <a href="#section2emAlta" class="arrow__btn text-6xl page">‹</a>
-                    {% for filme in lista_filmes_em_alta %}
+                    {% if lista_filmes_em_alta %}
+                        {% for filme in lista_filmes_em_alta %}
                     {% if forloop.counter < 5 %}
                       <div class="item aspect-square w-1/4 m-4">
                           <a href="{% url 'filme:detalhesfilme' filme.pk %}">
@@ -202,28 +228,43 @@ h1 {
                 </div>
                 {% endif%}
 
+                    {% else %}
+                        <p class="text-gray-400 py-8">
+                            Ainda não temos filmes em alta.
+                        </p>
+                    {% endif %}
+                    
 
             </div>
         </section>
-
+        {% if user.is_authenticated %}
          <section class='bg-primary_black flex justify-center py-2'>
             <div class="p-2 w-10/12 relative" >
                 <h2 class="text-gray-200 text-2xl font-medium">
                     Continuar Assistindo
                 </h2>
                 <div class="wrapper">
+ 
                   <section id="section1filmevistos" class="flex flex-nowrap items-center justify-center space-x-8">
                    
                     <a href="#section2filmesvistos" class="arrow__btn text-6xl page">‹</a>
-                    {% for filme in  request.user.filmes_vistos.all %}
-                    {% if forloop.counter < 5 %}
-                      <div class="item aspect-square w-1/4 m-4">
-                          <a href="{% url 'filme:detalhesfilme' filme.pk %}">
-                            <img src="{{ filme.thumb.url }}" class="rounded-md w-full h-full object-cover">
-                          </a>
-                      </div>
+                    {% with filmes_vistos=request.user.filmes_vistos.all %}
+                     {% if filmes_vistos %}
+                            {% for filme in filmes_vistos %}
+                                {% if forloop.counter < 5 %}
+                                    <div class="item aspect-square w-1/4 m-4">
+                                        <a href="{% url 'filme:detalhesfilme' filme.pk %}">
+                                            <img src="{{ filme.thumb.url }}" class="rounded-md w-full h-full object-cover">
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                    {% else %}
+                        <p class="text-gray-400 py-8">
+                            Você ainda não assistiu a nenhum filme.
+                        </p>
                     {% endif %}
-                    {% endfor %}
+                    {% endwith %}
                         <a href="#section2filmesvistos" class="arrow__btn text-6xl">›</a>
                   </section>
                     {% if  request.user.filmes_vistos.all|length > 4 %}
@@ -245,8 +286,8 @@ h1 {
 
 
             </div>
-        </section>
-
+         </section>
+{% endif %}
     </main>
 
 {% endblock %}

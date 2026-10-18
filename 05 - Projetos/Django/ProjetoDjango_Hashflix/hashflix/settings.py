@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'filme',
+    'crispy_forms',
+    'crispy_bootstrap5'
 ]
 
 MIDDLEWARE = [
@@ -130,4 +132,19 @@ MEDIA_URL = "media/"
 
 MEDIA_ROOT =  BASE_DIR / "media"
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_REDIRECT_URL = 'filme:homefilmes'
+
+LOGIN_URL = 'filme:login'
+
+LOGOUT_REDIRECT_URL = 'filme:homepage'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+
+AUTHENTICATION_BACKENDS = [
+    'filme.backends.EmailBackend',
+]

@@ -1,20 +1,38 @@
-from django.shortcuts import render
-from .models import Filme
-from django.views.generic import TemplateView, ListView, DetailView
-
+from django.shortcuts import render, redirect, reverse
+from .models import Filme, Usuario
+from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import logout
+from django.views import View
+from .forms import CriarContaForm, FormHomePage
+from django.contrib import messages
 # Create your views here.
 
 
-class Homepage(TemplateView):
+class Homepage(FormView):
     template_name = "homepage.html"
+    form_class = FormHomePage
+
+    def get_success_url(self):
+        email = self.request.POST.get("email")
+        usuarios = Usuario.objects.filter(email=email)
+        if usuarios:
+            return reverse("filme:login")
+        else:
+            return reverse("filme:criarconta")
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("filme:homefilmes")
+        else:
+            return super().get(request, *args, **kwargs)
 
 
-class Homefilmes(ListView):
+class Homefilmes(LoginRequiredMixin, ListView):
     template_name = "homefilmes.html"
     model = Filme
 
 
-class Detalhesfilme(DetailView):
+class Detalhesfilme(LoginRequiredMixin, DetailView):
     template_name = "detalhesfilme.html"
     model = Filme
     
@@ -38,7 +56,7 @@ class Detalhesfilme(DetailView):
 
 
 
-class Pesquisafilme(ListView):
+class Pesquisafilme(LoginRequiredMixin, ListView):
     template_name = "pesquisa.html"
     model = Filme
 
@@ -49,3 +67,52 @@ class Pesquisafilme(ListView):
             return object_list
         else:
             return None
+
+
+class Paginaperfil(LoginRequiredMixin, UpdateView):
+    template_name='editarperfil.html'
+    model = Usuario
+    fields = ["first_name", "last_name", "email"]
+
+    def get_success_url(self):
+        return reverse('filme:homefilmes')
+
+class Criarconta(FormView):
+    template_name = 'criarconta.html'
+    form_class = CriarContaForm
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            'Conta criada com sucesso! Faça login.'
+        )
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        email = self.request.POST.get('email', '').strip()
+
+        if email and Usuario.objects.filter(
+            email__iexact=email
+        ).exists():
+            messages.error(
+                self.request,
+                'Este e-mail já está cadastrado. '
+                'Faça login com sua conta.'
+            )
+            return redirect('filme:login')
+
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('filme:login')
+
+    
+
+class LogoutViewCustom(View):
+    def get(self, request):
+        return render(request, 'logout.html')
+
+    def post(self, request):
+        logout(request)
+        return redirect('filme:logout')

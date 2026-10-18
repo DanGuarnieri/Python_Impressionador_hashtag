@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block titulo %}
+Perfil Hashflix
+{% endblock %}
+
+{% block content %}
+<header class="min-h-screen bg-black bg-opacity-75 bg-blend-overlay showcase border-gray-600 border-b-8 flex justify-center items-center bg-no-repeat"
+        style="background-image: url('{% static 'images/background_netflix.jpg' %}');">
+        <div class="relative z-10 h-full pt-32 pb-16 md:pt-36 md:pb-16 text-gray-100 text-center flex items-center flex-col">   
+            <h2 class="text-2xl font-semibold mb-2">
+                {% if user.first_name %}
+                    Olá, {{ user.first_name }}!
+                {% else %}
+                    Meu perfil
+                {% endif %}
+            </h2>
+            <p class="text-gray-300 mb-6">
+                {{ user.email }}
+            </p>
+
+            <form method="post" class="w-full text-left">
+                 {% csrf_token %} 
+                <fieldset class="form-group">
+                    <legend class="border-b border-gray-600 mb-4 pb-2 text-center">  Edite seus dados pessoais</legend>
+                {{ form|crispy }}
+                </fieldset>
+                <button class="bg-red-600 hover:bg-red-700 py-2 px-4
+                       text-white md:text-lg rounded-md w-full mt-4" type="submit">Salvar alterações</button>
+            </form>
+            <small>
+                <a href="{% url 'filme:mudarsenha' %}" class="text-gray-300 hover:text-white underline">
+                Quer mudar sua senha?
+                </a>
+            </small>
+        </div>
+    </header>
+
+    <footer class="px-5 py-10 text-gray-400">
+        <ul class="flex flex-wrap justify-between items-center gap-3">
+            <li>&copy; 2026</li>
+            <li>Feito com Python (Django)</li>
+            <li>Danilo Guarnieri</li>
+        </ul>
+    </footer>
+
+
+{% endblock %}
